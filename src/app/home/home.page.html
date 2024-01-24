@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+      <ion-title size="large"> Welcome to <strong>CometChat Kit</strong></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense"></ion-header>
+    <div *ngIf="isLoggedIn" class="logged-in-container">
+      <ion-img src={{loggedInUser?.getAvatar()}}  [style.width.px]="200" [style.height.px]="200"></ion-img>
+      <ion-title>
+        Welcome <strong>{{loggedInUser?.getName()}}</strong> to our CometChat UI KIT
+      </ion-title>
+      <ion-buttons class="buttons-container">
+        <ion-button (click) = "goToChats()" class="buttons-container__item">Go To Chats</ion-button>
+        <ion-button (click) = "logout()" class="buttons-container__item">Log out</ion-button>
+      </ion-buttons>
+    </div>
+
+    <div *ngIf="!isLoggedIn" class="not-logged-in-container">
+      <ion-title>
+        <strong>Please log in or sign up</strong>
+      </ion-title>
+      <ion-buttons class="buttons-container">
+        <ion-button (click) = "login()" class="buttons-container__item">Login</ion-button>
+        <ion-button (click) = "signup()" class="buttons-container__item">Sign up</ion-button>
+      </ion-buttons>
+    </div>
+</ion-content>
