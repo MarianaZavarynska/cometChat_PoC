@@ -5,9 +5,9 @@
 export const environment = {
   production: false,
   cometChat: {
-    appID: '251584709c02cce8',
-    apiKey: 'a3a9e899e61b74b70dc113810a5c6b69bff2984a',
-    region: 'US',
+    appID: 'APP_ID',
+    apiKey: 'APP_KEY',
+    region: 'REGION',
   },
 };
 
