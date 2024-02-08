@@ -1,0 +1,60 @@
+<div class="chatScreenStyle">
+  <div class="chatScreenSidebarStyle" [@FadeInFadeOut]="checkAnimatedState">
+    <app-conversation-list
+      (onUserClick)="userClicked($event)"
+      [item]="curentItem"
+      [lastMessage]="lastMessage"
+      [type]="type"
+      [groupToUpdate]="groupToUpdate"
+      [groupToDelete]="groupToDelete"
+    ></app-conversation-list>
+  </div>
+  <div
+    class="chatScreenMainStyle"
+    *ngIf="item !== null"
+    [ngClass]="{
+      chatScreenMainSecondaryStyle: threadMessageView || viewDetailScreen
+    }"
+  >
+    <!--Message List Screen-->
+    <app-messages
+      [item]="item"
+      [type]="type"
+      [callMessage]="callMessage"
+      [groupMessage]="groupMessage"
+      [composedThreadMessage]="composedThreadMessage"
+      (actionGenerated)="actionHandler($event)"
+    >
+    </app-messages>
+    <!--Message List Screen ENDS-->
+  </div>
+
+  <!--DetailScreen-->
+
+  <div
+    *ngIf="threadMessageView || viewDetailScreen"
+    class="chatScreenSecondaryStyle"
+  >
+    <!--IF USER-->
+    <div
+      *ngIf="type === USER"
+      [ngClass]="{
+        detailScreenStyle: viewDetailScreen
+      }"
+    >
+
+
+    <!--ThreadedMessageView-->
+
+    <app-message-thread
+      *ngIf="threadMessageView"
+      [item]="threadMessageItem"
+      [type]="threadMessageType"
+      [parentMessage]="threadMessageParent"
+      [loggedInUser]="loggedInUser"
+      (actionGenerated)="actionHandler($event)"
+    ></app-message-thread>
+  </div>
+
+</div>
+</div>

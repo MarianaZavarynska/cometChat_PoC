@@ -1,0 +1,50 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="title">Audio Recording API Demo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-text-center">
+    <ion-row>
+      <ion-col>
+        <ion-icon name="mic" class="start-recording-button" (click)="startAudioRecording()"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="recording-control-buttons-container hide">
+      <ion-col>
+        <ion-icon name="close-circle" class="cancel-recording-button" (click)="cancelAudioRecording()"></ion-icon>
+      </ion-col>
+      <ion-col>
+        <ion-icon name="ellipse" class="red-recording-dot"></ion-icon>
+        <p class="elapsed-time"></p>
+      </ion-col>
+      <ion-col>
+        <ion-icon name="stop-circle" class="stop-recording-button" (click)="stopAudioRecording()"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="text-indication-of-audio-playing-container">
+      <ion-col class="ion-text-center">
+        <p class="text-indication-of-audio-playing hide">Audio is playing<span>.</span><span>.</span><span>.</span></p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="ion-text-center">
+    <audio controls class="audio-element hide">
+    </audio>
+  </ion-toolbar>
+</ion-footer>
+
+<!-- Ion-alert for browser not supporting audio recording -->
+<ion-alert
+  cssClass="browser-not-supporting-audio-recording-box"
+  header="Browser Not Supported"
+  message="To record audio, use browsers like Chrome and Firefox that support audio recording."
+  buttons={[ ]}
+></ion-alert>

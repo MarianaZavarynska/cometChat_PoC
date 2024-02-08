@@ -1,0 +1,20 @@
+<ion-content>
+  <ion-button class="start-button" (click)="startRecording()">Start Recording</ion-button>
+
+  <ion-button class="stop-button" *ngIf="isRecording && !blobUrl" (click)="stopRecording()">Stop Recording</ion-button>
+
+  <ion-button class="cancel-button" *ngIf="!isRecording && blobUrl" (click)="clearRecordedData()">Clear Recording</ion-button>
+
+  <br>
+
+<!--  <ion-button class="cancel-button" *ngIf="!isRecording && blobUrl" (click)="download()">Download Recording</ion-button>-->
+
+  <div *ngIf="isRecording && !blobUrl">{{ recordedTime }}</div>
+
+  <div>
+    <audio *ngIf="!isRecording && blobUrl" controls>
+      <source [src]="blobUrl" type="audio/webm">
+    </audio>
+  </div>
+</ion-content>
+

@@ -1,0 +1,50 @@
+<!-- message-container.component.html -->
+
+<ion-row>
+  <!-- CometChat Message Actions -->
+  <ion-col>
+    <ion-row>
+  <message-actions
+    class="tool"
+    [messageDetails]="messageDetails"
+    (actionGenerated)="actionHandler($event)"
+  ></message-actions>
+    </ion-row>
+  </ion-col>
+
+  <!-- Message Wrapper -->
+  <div><mark>AUDIO</mark></div>
+  <ion-col>
+    <ion-row>
+      <!-- Audio Player -->
+      <audio controls>
+        <source [src]="audioUrl" />
+      </audio>
+
+
+    </ion-row>
+  </ion-col>
+
+  <!-- CometChat Message Reactions -->
+  <message-reactions
+    [messageDetails]="messageDetails"
+    [loggedInUser]="loggedInUser"
+    (actionGenerated)="actionHandler($event)"
+  ></message-reactions>
+
+  <!-- Message Info Wrapper -->
+  <ion-col class="messageInfoWrapperStyle">
+    <!-- CometChat Threaded Message Reply Count -->
+    <threaded-message-reply-count
+      [messageDetails]="messageDetails"
+      (actionGenerated)="actionHandler($event)"
+    ></threaded-message-reply-count>
+  </ion-col>
+
+<!--    &lt;!&ndash; CometChat Read Receipt &ndash;&gt;-->
+<!--    <cometchat-read-receipt-->
+<!--      [messageDetails]="messageDetails"-->
+<!--    ></cometchat-read-receipt>-->
+<!--  </ion-col>-->
+</ion-row>
+

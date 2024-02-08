@@ -13,11 +13,27 @@ import {
   ConversationsWithMessagesDemoComponent,
   SignUpComponent,
 } from "./components";
+import {SenderAudioMessageModule} from "./modules/comet-chat-source/sender-audio-message/sender-audio-message.module";
+import {
+  ConversationListWithMessagesModule
+} from "./modules/comet-chat-source/conversation-list-with-messages/conversation-list-with-messages.module";
+import {JsAudioRecorderModule} from "./modules/js-audio-recorder/js-audio-recorder.module";
+import {AudioRecorderModule} from "./modules/audio-recorder/audio-recorder.module";
 
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, SignUpComponent, ChatsComponent, ConversationsWithMessagesDemoComponent],
-  imports: [BrowserModule, CometChatConversationsWithMessages, IonicModule.forRoot(), AppRoutingModule, FormsModule, CometChatIncomingCall],
+  imports: [BrowserModule,
+    CometChatConversationsWithMessages,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    FormsModule,
+    CometChatIncomingCall,
+    SenderAudioMessageModule,
+    ConversationListWithMessagesModule,
+    JsAudioRecorderModule,
+    AudioRecorderModule
+  ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

@@ -1,0 +1,32 @@
+<div class="chatWrapperStyle">
+  <!-- Add the Action To header to make it Dynamic -->
+  <app-message-header
+    [item]="item"
+    [type]="type"
+    (actionGenerated)="actionHandler($event)"
+  ></app-message-header>
+  <div
+    class="messageWindowStyle"
+    (scroll)="handleScroll($event)"
+    #messageWindow
+  >
+    <app-message-list
+      [item]="item"
+      [type]="type"
+      [messages]="messageList"
+      [reachedTopOfConversation]="reachedTopOfConversation"
+      (actionGenerated)="actionHandler($event)"
+
+    ></app-message-list>
+  </div>
+  <app-message-composer
+    [item]="item"
+    [type]="type"
+    [replyPreview]="replyPreview"
+    [messageToBeEdited]="messageToBeEdited"
+    [messageToReact]="messageToReact"
+    [loggedInUser]="loggedInUser"
+    (actionGenerated)="actionHandler($event)"
+  ></app-message-composer>
+
+</div>

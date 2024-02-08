@@ -1,0 +1,33 @@
+<div class="outer">
+  <div class="listItem" (click)="onUserClicked(conversationDetails)">
+    <div class="itemThumbnailStyle">
+    </div>
+    <div class="itemDetailStyle">
+      <div class="itemRowStyle">
+        <div class="itemNameStyle">
+          <!--Conversation Name-->
+          {{ lastMessageName }}
+        </div>
+        <span class="itemLastMsgTimeStyle">
+          {{ lastMessageTimestamp }}
+        </span>
+      </div>
+      <div class="itemRowStyle">
+        <div class="itemLastMsgStyle">
+          <!--Last Message-->
+          {{ lastMessage }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bin Icon  -->
+  <div class="onHoverShow">
+    <button
+      type="button"
+      title="delete"
+      class="groupButtonStyle deleteIcon"
+      (click)="deleteConversation(conversationDetails)"
+    ></button>
+  </div>
+</div>
