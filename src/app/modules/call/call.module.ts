@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import {CallComponent} from "./call.component";
 import {IonicModule} from "@ionic/angular";
-import {RouterModule} from "@angular/router";
 import {CallRoutingModule} from "./call-routing.module";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   declarations: [CallComponent],

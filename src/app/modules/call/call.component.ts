@@ -1,9 +1,6 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {CometChat} from "@cometchat-pro/chat";
-import {CometChatUIKit} from "@cometchat/chat-uikit-angular";
-import {environment} from "../../../environments/environment";
-import {CometChatCalls} from "@cometchat/calls-sdk-javascript";
-import {CallSettings} from "@cometchat/calls-sdk-javascript/pack/models/CallSettings";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -12,8 +9,6 @@ import {CallSettings} from "@cometchat/calls-sdk-javascript/pack/models/CallSett
   styleUrls: ['./call.component.scss'],
 })
 export class CallComponent  implements OnInit {
-  //@ViewChild('exampleDiv', { static: true }) exampleDiv!: ElementRef;
-
   users: any = [
     {
       name:"Iron Man",
@@ -45,36 +40,40 @@ export class CallComponent  implements OnInit {
   incomingCall: CometChat.Call | null = null;
   outgoingCall: CometChat.Call | null=null;
   error: string = '';
-  loggedinUser: Object  | undefined = undefined;
+  loggedinUser: any = undefined;
+  isSomeoneCalling: boolean = false;
+  isCallInProgress: boolean = false;
 
-  constructor() { }
+  constructor(private router: Router, private route: ActivatedRoute, private zone: NgZone) { }
 
   ngOnInit() {
-    CometChat.login(this.users[0].uid as any, environment?.cometChat?.apiKey as any).then(
-      user => {
-        console.log("Login Successful:", { user });
-      }, error => {
-        console.log("Login failed with exception:", { error });
-      }
-    );
+    this.route.queryParams.subscribe(params => {
+      const uid = params['uid'];
+      this.loggedinUser = uid;
+    });
 
-    let listnerID: string = this.users[0].uid;
+    let listnerID: string = this.loggedinUser.uid;
     CometChat.addCallListener(
       listnerID,
       new CometChat.CallListener({
         onIncomingCallReceived: (call: CometChat.Call) => {
-          console.log("Incoming call:", call);
-          this.acceptCall(call.getSessionId())
+
+          this.zone.run(() => {
+            console.log("Incoming call:", call);
+            this.isSomeoneCalling = true;
+            this.incomingCall = call;
+            this.error = "Incoming call"
+            console.log(this.isSomeoneCalling, this.incomingCall,this.error );
+          });
         },
         onOutgoingCallAccepted: (call: CometChat.Call) => {
           console.log("Outgoing call accepted:", call);
+          const sessionID = call.getSessionId();
 
           const callSettingsCustom = new CometChat.CallSettingsBuilder()
+            .setSessionID(sessionID)
             .enableDefaultLayout(true)
-            .setIsAudioOnlyCall(false)
             .forceLegacyUI(true)
-            .showMuteAudioButton(true)
-            .showEndCallButton(true)
 
             // .setCallListener(
             //   new CometChatCalls.OngoingCallListener({
@@ -120,70 +119,26 @@ export class CallComponent  implements OnInit {
             .build();
 
           const htmlElement = document.getElementById("my-call");
-          CometChat.startCall(callSettingsCustom as any, htmlElement as any)
+          CometChat.startCall(callSettingsCustom, htmlElement as any)
+          this.zone.run(() => {
+            this.isCallInProgress = true;
+          });
         },
         onOutgoingCallRejected: (call: CometChat.Call) => {
           console.log("Outgoing call rejected:", call);
         },
         onIncomingCallCancelled: (call: CometChat.Call) => {
           console.log("Incoming call calcelled:", call);
+          const sessionID = call.getSessionId();
+          this.rejectCall(sessionID);
         },
         onCallEndedMessageReceived: (call: CometChat.Call) => {
           console.log("CallEnded Message:", call);
         }
       })
     );
-
-          // CometChatUIKit.login({uid: 'superhero2' as any, authToken: environment?.cometChat?.apiKey as any}).then(
-          //   user => {
-          //     console.log("Login Successful:", user);
-          //        this.loggedinUser = user;
-          //   }, error => {
-          //     this.error = error.message
-          //     console.log(error)
-          //   }
-          // )
-
-    // CometChat.addCallListener(
-    //   'call-listener-id',
-    //   new CometChat.CallListener({
-    //     onIncomingCallReceived: (call: CometChat.Call) => {
-    //       console.log('Incoming call received:', call);
-    //       // Handle incoming call event
-    //
-    //     },
-    //     onOutgoingCallAccepted: (call: CometChat.Call) => {
-    //       console.log('Outgoing call accepted:', call);
-    //       this.acceptCall(call.getSessionId())
-    //     },
-    //     onOutgoingCallRejected: (call: CometChat.Call) => {
-    //       console.log('Outgoing call rejected:', call);
-    //       this.rejectCall(call.getSessionId())
-    //       // Handle outgoing call rejected event
-    //     },
-    //     onCallEnded: (call: CometChat.Call) => {
-    //       console.log('Call ended:', call);
-    //       this.cancelCall(call.getSessionId())
-    //       // Handle call ended event
-    //     },
-    //   })
-    // );
   }
 
-  // async fetchCometChatUsers() {
-  //   try {
-  //     // Replace the following with your actual logic to fetch users from CometChat
-  //     // This is just a placeholder to demonstrate the concept
-  //     await CometChat.getLoggedinUser().then((user) => {
-  //       if (user && this.users) {
-  //         this.users.push(user)
-  //       }
-  //     });
-  //
-  //   } catch (error) {
-  //     console.error('Error fetching users from CometChat', error);
-  //   }
-  // }
 
   startCometChatCall() {
     let callListener: CometChat.OngoingCallListener = new CometChat.OngoingCallListener({
@@ -225,44 +180,34 @@ export class CallComponent  implements OnInit {
 
   }
 
-  startAudioCall() {
-    //const receiverID = this.users[1].uid; // Replace with the actual user ID you want to call
-    const call = new CometChat.Call(this.users[1].uid, CometChat.CALL_TYPE.AUDIO, CometChat.RECEIVER_TYPE.USER) as CometChat.Call;
-    //call.setCallInitiator(this.users[0]);
+  startAudioCall(receiverUID: string) {
+    const call = new CometChat.Call(receiverUID, CometChat.CALL_TYPE.AUDIO, CometChat.RECEIVER_TYPE.USER) as CometChat.Call;
     console.log('calling...', call);
     CometChat.initiateCall(call).then( (outgoingCall) => {
         console.log('Call initiated successfully:', outgoingCall);
-        //this.outgoingCall = outgoingCall;
-        //this.incomingCall = outgoingCall;
-        // perform action on success. Like show your calling screen.
+        this.outgoingCall = call;
       },
         error => {
           console.log("Call initialization failed with exception:", error);
         }).catch(  (error) => {
       console.log('Call initiation failed with error:', error);
     });
-
-    // CometChat.initiateCall(call).then(
-    //   outGoingCall => {
-    //     console.log("Call initiated successfully:", outGoingCall);
-    //   }, error => {
-    //     console.log("Call initialization failed with exception:", error);
-    //   }
-    // );
   };
 
-  // endCall() {
-  //   if (this.ongoingCall) {
-  //     CometChat.endCall(this.ongoingCall.sessionId).then(
-  //       (call) => {
-  //         console.log('Call ended successfully:', call);
-  //         this.ongoingCall = null; // Clear the ongoingCall variable
-  //       },
-  //       (error) => {
-  //         console.log('End call failed with error:', error);
-  //       }
-  //     );
-  //   }
+  startVideoCall(receiverUID: string) {
+    const call = new CometChat.Call(receiverUID, CometChat.CALL_TYPE.VIDEO, CometChat.RECEIVER_TYPE.USER) as CometChat.Call;
+    console.log('video calling...', call);
+
+    CometChat.initiateCall(call).then( (outgoingCall) => {
+        console.log('Video Call initiated successfully:', outgoingCall);
+        this.outgoingCall = call;
+      },
+      error => {
+        console.log("Call initialization failed with exception:", error);
+      }).catch(  (error) => {
+      console.log('Call initiation failed with error:', error);
+    });
+  };
 
   cancelCall(sessionID: string){
     let status = CometChat.CALL_STATUS.CANCELLED;
@@ -270,6 +215,7 @@ export class CallComponent  implements OnInit {
     CometChat.rejectCall(sessionID, status).then(
       (call: CometChat.Call) => {
         console.log("Call rejected successfully", call);
+        this.outgoingCall = null;
       }).catch((error: CometChat.CometChatException) => {
       console.log("Call rejection failed with error:", error);
     })
@@ -280,6 +226,23 @@ export class CallComponent  implements OnInit {
     CometChat.acceptCall(sessionID).then(
       (call: CometChat.Call) => {
         console.log("Call accepted successfully:", call);
+        const callSettingsCustom = new CometChat.CallSettingsBuilder()
+          .enableDefaultLayout(true)
+          .setSessionID(sessionID)
+          .forceLegacyUI(true)
+          .showRecordingButton(true)
+          .build();
+
+        const htmlElement = document.getElementById("my-call");
+        CometChat.startCall(callSettingsCustom as any, htmlElement as any);
+
+        this.zone.run(() => {
+          this.isCallInProgress = true;
+          this.isSomeoneCalling = true;
+          this.incomingCall = call;
+          this.error = "Accept call"
+          this.outgoingCall = call;
+        });
       }).catch((error: CometChat.CometChatException) => {
       console.log("Call acceptance failed with error", error);
     })
@@ -291,6 +254,14 @@ export class CallComponent  implements OnInit {
     CometChat.rejectCall(sessionID, status).then(
       (call: CometChat.Call) => {
         console.log("Call rejected successfully", call);
+
+        this.zone.run(() => {
+          console.log("Incoming call:", call);
+          this.isSomeoneCalling = false;
+          this.incomingCall = null;
+          this.outgoingCall = null;
+          console.log(this.isSomeoneCalling, this.incomingCall,this.error );
+        });
       }).catch((error: CometChat.CometChatException) => {
       console.log("Call rejection failed with error:", error);
     })

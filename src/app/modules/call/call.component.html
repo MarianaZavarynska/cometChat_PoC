@@ -13,24 +13,30 @@
             <h2 class="user__name">{{ user.name }}</h2>
             <p class="user__uid">{{ user.uid }}</p>
           </ion-label>
+          <ion-button *ngIf="loggedinUser !== user.uid" (click)="startAudioCall(user.uid)">Start Audio Call</ion-button>
+          <ion-button *ngIf="loggedinUser !== user.uid" class="video__call__btn" (click)="startVideoCall(user.uid)">Start Video Call</ion-button>
         </ion-item>
       </ion-card-content>
     </ion-card>
   </ion-header>
-  <ion-button (click)="startAudioCall()">Start Audio Call</ion-button>
   <!-- Replace the following with your actual data and logic -->
-  <div *ngIf="incomingCall">
-<!--    Call from {{ incomingCall.getCallInitiator()?.getName()}}-->
-      <ion-button (click)="acceptCall(incomingCall.getSessionId())">Accept</ion-button>)
+  <div *ngIf="isSomeoneCalling && incomingCall" class="incoming-call-modal">
+    <div *ngIf="incomingCall.getSender() && incomingCall.getSender().getAvatar() " class="modal-main">
+      <img src="{{incomingCall.getSender().getAvatar() }}">
+    </div>
+    <div class="modal-button">
+      <ion-button  (click)="acceptCall(incomingCall.getSessionId())">Accept</ion-button>
       <ion-button (click)="rejectCall(incomingCall.getSessionId())">Reject</ion-button>
+    </div>
 
   </div>
 
 
     <div *ngIf="outgoingCall">
-      <!--    Calling {{ outgoingCall.getCallReceiver()?.getName()}}-->
-      <ion-button (click)="cancelCall(outgoingCall.getSessionId())">Cancel</ion-button>
+    <mark>CALLING...</mark>
     </div>
-  <div id="my-call"></div>
+  <div class="{{isCallInProgress ? 'call-in-progress' : 'call-in-progress-none'}}">
+    <div id="my-call" ></div>
+  </div>
 </ion-content>
 
