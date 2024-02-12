@@ -1,0 +1,49 @@
+.logged-in-container,
+.not-logged-in-container{
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logged-in-container strong,
+.not-logged-in-container strong{
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.logged-in-container p,
+.not-logged-in-container p{
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #8c8c8c;
+
+  margin: 0;
+}
+
+.clogged-in-container a,
+.not-logged-in-container a{
+  text-decoration: none;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px;
+
+  .buttons-container__item {
+    width: 200px;
+    background: #36abe0;
+    padding: 10px;
+    font-size: 1.2rem;
+  }
+}
