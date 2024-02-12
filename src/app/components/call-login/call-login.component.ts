@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
-import {CometChatUIKit} from "@cometchat/chat-uikit-angular";
 import {environment} from "../../../environments/environment";
 import {CometChat} from "@cometchat-pro/chat";
 
