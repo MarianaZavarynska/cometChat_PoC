@@ -8,6 +8,8 @@ import {
   SignUpComponent,
   GroupsWithMessagesComponent
 } from "./components";
+import {CallHomeComponent} from "./components/call-home/call-home.component";
+import {CallLoginComponent} from "./components/call-login/call-login.component";
 
 const routes: Routes = [
   {
@@ -27,12 +29,20 @@ const routes: Routes = [
     loadChildren: () => import('./modules/audio-recorder/audio-recorder.module').then(m => m.AudioRecorderModule)
   },
   {
-    path: 'audio-call',
+    path: 'call-audio',
     loadChildren: () => import('./modules/call/call.module').then(m => m.CallModule)
   },
   {
+    path: 'call-home',
+    component: CallHomeComponent
+  },
+  {
+    path: 'call-login',
+    component: CallLoginComponent
+  },
+  {
     path: '',
-    redirectTo: 'audio-call',
+    redirectTo: 'call-home',
     pathMatch: 'full'
   },
   {

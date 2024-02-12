@@ -42,8 +42,7 @@ export class CallLoginComponent  implements OnInit {
   public buttonImage:string="assets/button-opc.png";
   public backgroundImage:string="assets/Image-518@1x.png";
   public inProgress:boolean = false;
-  constructor(private router:Router) {
-  }
+  constructor(private router:Router) {}
 
   ngOnInit() {
     this.checkUserLogIn();
@@ -57,7 +56,7 @@ export class CallLoginComponent  implements OnInit {
         }
         else {
           const uid = user.getUid();
-          this.router.navigate(['/audio-call'], { queryParams: { uid } });
+          this.router.navigate(['/call-audio'], { queryParams: { uid } });
 
         }
       }, error => {
@@ -77,8 +76,8 @@ export class CallLoginComponent  implements OnInit {
             CometChat.login(UID as any, environment?.cometChat?.apiKey as any).then(
               user => {
                 this.inProgress = false
-                console.log("Login Successful:", user );
-                this.router.navigate(['/audio-call']);
+                const uid = user.getUid();
+                this.router.navigate(['/call-audio'], { queryParams: { uid } });
               }, error => {
                 this.inProgress = false
                 this.error = error.message
@@ -90,7 +89,7 @@ export class CallLoginComponent  implements OnInit {
           }
           else {
             this.inProgress = false
-            this.router.navigate(['/audio-call']);
+            this.router.navigate(['/call-audio']);
           }
         }, error => {
           this.inProgress = false

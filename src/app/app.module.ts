@@ -20,11 +20,20 @@ import {
 import {JsAudioRecorderModule} from "./modules/js-audio-recorder/js-audio-recorder.module";
 import {AudioRecorderModule} from "./modules/audio-recorder/audio-recorder.module";
 import {CallModule} from "./modules/call/call.module";
-import {CallModalComponent} from "./components/call-modal/call-modal.component";
+import {CallHomeComponent} from "./components/call-home/call-home.component";
+import {CallLoginComponent} from "./components/call-login/call-login.component";
 
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, SignUpComponent, ChatsComponent, ConversationsWithMessagesDemoComponent, CallModalComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    SignUpComponent,
+    ChatsComponent,
+    ConversationsWithMessagesDemoComponent,
+    CallHomeComponent,
+    CallLoginComponent
+  ],
   imports: [BrowserModule,
     CometChatConversationsWithMessages,
     IonicModule.forRoot(),

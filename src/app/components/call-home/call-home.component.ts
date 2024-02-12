@@ -33,6 +33,7 @@ export class CallHomeComponent implements OnInit {
   }
 
   login(){
+
     this.router.navigate(['/call-login']);
   }
 
@@ -47,7 +48,8 @@ export class CallHomeComponent implements OnInit {
     this.router.navigate(['/sign-up']);
   }
   goToCall(){
-    this.router.navigate(['/audio-call']);
+    const uid = this.loggedInUser.getUid();
+    this.router.navigate(['/call-audio'], {queryParams: {uid}});
   }
 }
 
