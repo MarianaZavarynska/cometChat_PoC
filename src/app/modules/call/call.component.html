@@ -1,0 +1,36 @@
+<!-- call.component.html -->
+
+<ion-content class="ion-padding">
+
+  <ion-header *ngIf="users">
+    <ion-card *ngFor="let user of users">
+      <ion-card-content>
+        <ion-item>
+          <ion-avatar slot="start">
+            <ion-img [src]="user.avatar"></ion-img>
+          </ion-avatar>
+          <ion-label class="user__details">
+            <h2 class="user__name">{{ user.name }}</h2>
+            <p class="user__uid">{{ user.uid }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ion-header>
+  <ion-button (click)="startAudioCall()">Start Audio Call</ion-button>
+  <!-- Replace the following with your actual data and logic -->
+  <div *ngIf="incomingCall">
+<!--    Call from {{ incomingCall.getCallInitiator()?.getName()}}-->
+      <ion-button (click)="acceptCall(incomingCall.getSessionId())">Accept</ion-button>)
+      <ion-button (click)="rejectCall(incomingCall.getSessionId())">Reject</ion-button>
+
+  </div>
+
+
+    <div *ngIf="outgoingCall">
+      <!--    Calling {{ outgoingCall.getCallReceiver()?.getName()}}-->
+      <ion-button (click)="cancelCall(outgoingCall.getSessionId())">Cancel</ion-button>
+    </div>
+  <div id="my-call"></div>
+</ion-content>
+

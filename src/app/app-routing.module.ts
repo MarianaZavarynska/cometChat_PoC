@@ -27,8 +27,12 @@ const routes: Routes = [
     loadChildren: () => import('./modules/audio-recorder/audio-recorder.module').then(m => m.AudioRecorderModule)
   },
   {
+    path: 'audio-call',
+    loadChildren: () => import('./modules/call/call.module').then(m => m.CallModule)
+  },
+  {
     path: '',
-    redirectTo: 'audio-recorder',
+    redirectTo: 'audio-call',
     pathMatch: 'full'
   },
   {
