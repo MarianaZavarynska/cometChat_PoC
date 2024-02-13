@@ -51,5 +51,9 @@ export class CallHomeComponent implements OnInit {
     const uid = this.loggedInUser.getUid();
     this.router.navigate(['/call-audio'], {queryParams: {uid}});
   }
+
+  goToAudioRecorder(){
+    this.router.navigate(['/audio-recorder']);
+  }
 }
 
