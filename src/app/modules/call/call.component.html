@@ -20,7 +20,7 @@
     </ion-card>
   </ion-header>
   <!-- Replace the following with your actual data and logic -->
-  <div *ngIf="isSomeoneCalling && incomingCall" class="incoming-call-modal">
+  <div *ngIf="incomingCall" class="incoming-call-modal">
     <div *ngIf="incomingCall.getSender() && incomingCall.getSender().getAvatar() " class="modal-main">
       <img src="{{incomingCall.getSender().getAvatar() }}">
     </div>
@@ -31,11 +31,12 @@
 
   </div>
 
-
+<p>{{outgoingCall}}</p>
     <div *ngIf="outgoingCall">
+
     <mark>CALLING...</mark>
     </div>
-  <div class="{{isCallInProgress ? 'call-in-progress' : 'call-in-progress-none'}}">
+  <div class="{{outgoingCall ? 'call-in-progress' : 'call-in-progress-none'}}">
     <div id="my-call" ></div>
   </div>
 </ion-content>
