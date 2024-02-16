@@ -55,7 +55,7 @@ export class CallComponent  implements OnInit {
 
     let listnerID: string = this.loggedinUser.uid;
     CometChat.addCallListener(
-      listnerID,
+      `incoming-${this.loggedinUser.uid}`,
       new CometChat.CallListener({
         onIncomingCallReceived: (call: CometChat.Call) => {
           console.log("Incoming call:", call);
@@ -64,6 +64,7 @@ export class CallComponent  implements OnInit {
           });
         },
         onIncomingCallCancelled: (call: CometChat.Call) => {
+          console.log("Incoming canceled:", call);
           this.zone.run(() => {
             this.incomingCall = null
           });
@@ -88,7 +89,8 @@ export class CallComponent  implements OnInit {
     CometChat.initiateCall(call).then( (outgoingAudioCall:any) => {
 
       this.outgoingCall = outgoingAudioCall;
-      CometChat.addCallListener(this.loggedinUser.uid,
+      CometChat.addCallListener(
+        `outgoing-${this.loggedinUser.uid}`,
         new CometChat.CallListener({
           onOutgoingCallAccepted: (call: CometChat.Call) => {
             console.log("Outgoing call accepted:", call);
@@ -106,8 +108,7 @@ export class CallComponent  implements OnInit {
 
             const ongoingCallListener = new CometChat.OngoingCallListener({
               onCallEnded: (call: CometChat.Call) => {
-                console.log("Call ended:", call);
-                console.log('calling...', );
+                console.log("ongoingCall ended:", call);
 
                 this.zone.run(() => {
                     console.log("Call ended zone:", call);
@@ -157,7 +158,7 @@ export class CallComponent  implements OnInit {
 
           },
           onOutgoingCallRejected: (call: CometChat.Call) => {
-                console.log("Outgoing call rejected:", call);
+                console.log("OutgoingCall rejected:", call);
               this.zone.run(() => {
               this.outgoingCall = null;
               this.isCallInProgress = false;
@@ -302,6 +303,7 @@ export class CallComponent  implements OnInit {
 
         this.zone.run(() => {
           this.isCallInProgress = true;
+          this.incomingCall = null;
         });
       }).catch((error: CometChat.CometChatException) => {
       console.log("Call acceptance failed with error", error);
