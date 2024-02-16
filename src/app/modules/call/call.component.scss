@@ -4,7 +4,7 @@
   height: 350px;
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.1);
   top: 36%;
-  z-index: 99999;
+  z-index: 15;
   left: 36%;
   background: white;
   display: flex;
@@ -27,9 +27,27 @@
   position: absolute;
   width: 90%;
   top: 15px;
-  z-index: 99999;
+  z-index: 15;
   height: 90%;
 }
+
+.outgoing-call-in-progress{
+  position: absolute;
+  width: 20%;
+  top: 30%;
+  left: 40%;
+  z-index: 15;
+  height: 20%;
+  //border: 1px black solid;
+  //opacity: 0.8;
+  text-align: center;
+
+  div{
+    z-index: 18;
+    //color: white;
+  }
+}
+
 
 .call-in-progress > div {
   height: 100%;

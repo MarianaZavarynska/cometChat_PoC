@@ -13,8 +13,8 @@
             <h2 class="user__name">{{ user.name }}</h2>
             <p class="user__uid">{{ user.uid }}</p>
           </ion-label>
-          <ion-button *ngIf="loggedinUser !== user.uid" (click)="startAudioCall(user.uid)">Start Audio Call</ion-button>
-          <ion-button *ngIf="loggedinUser !== user.uid" class="video__call__btn" (click)="startVideoCall(user.uid)">Start Video Call</ion-button>
+          <ion-button *ngIf="loggedinUser !== user.uid" (click)="startCall(CometChat.CALL_TYPE.AUDIO, user.uid)">Start Audio Call</ion-button>
+          <ion-button *ngIf="loggedinUser !== user.uid" class="video__call__btn" (click)="startCall(CometChat.CALL_TYPE.VIDEO, user.uid)">Start Video Call</ion-button>
         </ion-item>
       </ion-card-content>
     </ion-card>
@@ -31,12 +31,19 @@
 
   </div>
 
-<p>{{outgoingCall}}</p>
-    <div *ngIf="outgoingCall">
+    <ion-card *ngIf="outgoingCall" class="outgoing-call-in-progress">
+       <ion-card-content>
+         <ion-title>
+           CALLING TO
+         </ion-title>
+        <ion-card-title>
+            {{ outgoingCall.getReceiver().getName() }}
+        </ion-card-title>
+          <ion-spinner></ion-spinner>
+       </ion-card-content>
+    </ion-card>
 
-    <mark>CALLING...</mark>
-    </div>
-  <div class="{{outgoingCall ? 'call-in-progress' : 'call-in-progress-none'}}">
+  <div class="{{isCallInProgress ? 'call-in-progress' : 'call-in-progress-none'}}">
     <div id="my-call" ></div>
   </div>
 </ion-content>
